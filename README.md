@@ -1,20 +1,20 @@
 # sip_gram_v2
 
-`sip_gram_v2` is a Laravel-based project built with PHP 8.2.27 and Composer 2.8.5. This project serves as a modern application built with the latest technologies to provide robust functionality.
+`sip_gram_v2` — это проект на базе Laravel, использующий PHP 8.2.27 и Composer 2.8.5.
 
-## Requirements
+## Требования
 
-Before setting up the project, make sure you have the following installed:
+Перед установкой убедитесь, что на вашем компьютере установлены следующие компоненты:
 
-- **PHP 8.2.27** or later
-- **Composer 2.8.5** or later
-- **Laravel 11** (This project uses the latest Laravel version)
-- **Node.js** (for managing frontend assets)
-- **MySQL** (or any other database configured in `.env`)
+- **PHP 8.2.27** или новее
+- **Composer 2.8.5** или новее
+- **Laravel 11** (этот проект использует последнюю версию Laravel)
+- **Node.js** (для работы с фронтенд-ресурсами)
+- **MySQL** (или другой конфигурируемый в `.env` базе данных)
 
-## Installation
+## Установка
 
-### 1. Clone the Repository
+### 1. Клонируйте репозиторий
 
 ```bash
 git clone https://github.com/your-username/sip_gram_v2.git
