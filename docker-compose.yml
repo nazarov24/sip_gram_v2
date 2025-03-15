@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  api_admin_gram_v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api_admin_gram_v2
+    image: api_admin_gram_v2:latest
+    ports:
+      - "8080:9000"
+    volumes:
+      - .:/var/www
+    networks:
+      - app_network
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
