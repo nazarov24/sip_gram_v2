@@ -19,7 +19,7 @@ Route::prefix('auth')->group(function (){
 
 
 
-Route::middleware('auth:api')->group(function () {
+
     Route::get('/roles', [RoleController::class, 'index']);
     Route::post('/roles', [RoleController::class, 'store']);
     Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
@@ -28,7 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/permissions', [PermissionController::class, 'store']);
     Route::put('/permissions/{id}', [PermissionController::class, 'update']); 
     Route::delete('/permissions/{id}/delete', [PermissionController::class, 'destroy']); 
-});
+
 
 
 Route::middleware('auth:api')->group(function () {
