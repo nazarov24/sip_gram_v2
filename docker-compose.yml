@@ -29,12 +29,14 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
+    
+
 
   nginx:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "80:80"
+      - "83:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www
