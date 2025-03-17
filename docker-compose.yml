@@ -7,17 +7,17 @@ services:
       dockerfile: Dockerfile
     container_name: api_admin_gram_v2
     image: api_admin_gram_v2:latest
-    ports:
-      - "8080:9000"
     volumes:
       - .:/var/www
     networks:
       - app_network
     depends_on:
       - db
+    expose:
+      - "9000"
 
   db:
-    image: postgres:latest
+    image: postgis/postgis:latest
     container_name: postgres_db
     environment:
       POSTGRES_USER: postgres
@@ -29,6 +29,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www
+    networks:
+      - app_network
+    depends_on:
+      - api_admin_gram_v2
 
 volumes:
   postgres_data:
