@@ -24,8 +24,13 @@ COPY . .
 # Устанавливаем зависимости Laravel
 RUN composer install --optimize-autoloader --no-dev
 
+# Устанавливаем правильные права и владельцев для storage и bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 # Открываем порт 9000 для PHP-FPM
 EXPOSE 9000
 
 # Запускаем PHP-FPM
 CMD ["php-fpm"]
+
