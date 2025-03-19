@@ -30,8 +30,7 @@ class PermisionRoleController extends Controller
         return response()->json($permissions, 200);
     }
 
-
-
+    
     public function assignPermissions(Request $request, $roleId)
     {
         $role = Role::findOrFail($roleId);
