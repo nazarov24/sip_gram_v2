@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Driver;
 
 use Illuminate\Database\Eloquent\Model;
 
