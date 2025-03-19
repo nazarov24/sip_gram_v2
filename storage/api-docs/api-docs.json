@@ -1,11 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My API",
-        "description": "Документация API для моего приложения",
-        "contact": {
-            "email": "support@example.com"
-        },
+        "title": "API Documentation",
+        "description": "Документация API для управления ролями и разрешениями",
         "version": "1.0.0"
     },
     "paths": {
@@ -190,6 +187,15 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
