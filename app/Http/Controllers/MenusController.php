@@ -26,7 +26,7 @@ class MenusController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'меню успешно создан.',
+            'message' => 'Mеню успешно создан.',
             'menus' => $menus
         ], 201);
     }
@@ -45,11 +45,8 @@ class MenusController extends Controller
     {
 
         $menus = Menus::find($id);
-        if(!$menus){return response()->json(['message' => 'menus not found'], 404);}
+        if(!$menus){return response()->json(['message' => 'Menus not found'], 404);}
 
-        // if (!Auth::user()->can('edit menuss')) {
-        //     return response()->json(['message' => 'У вас нет прав для обновления менюа.'], 403);
-        // }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -59,7 +56,7 @@ class MenusController extends Controller
         $menus->update($validated);
 
         return response()->json([
-            'message' => 'меню успешно обновлён.',
+            'message' => 'Mеню успешно обновлён.',
             'menus' => $menus
         ], 200);
     }
@@ -70,13 +67,9 @@ class MenusController extends Controller
     {
         $menus = Menus::findOrFail($id);
 
-        // if (!Auth::user()->can('delete menuss')) {
-        //     return response()->json(['message' => 'У вас нет прав для удаления менюа.'], 403);
-        // }
-
         $menus->delete();
 
-        return response()->json(['message' => 'меню успешно удалён.'], 200);
+        return response()->json(['message' => 'Mеню успешно удалён.'], 200);
     }
 
 }

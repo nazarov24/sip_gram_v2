@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\MenusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\RoleController;
@@ -58,10 +59,10 @@ Route::post('/subsections/{subsection_id}/roles', [PermisionRoleController::clas
 
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('/menus', [\App\Http\Controllers\MenusController::class, 'store']);
-    Route::get('/menus/index', [\App\Http\Controllers\MenusController::class, 'index']);
-    Route::put('/menus/{id}', [\App\Http\Controllers\MenusController::class, 'update']);
-    Route::delete('/menus/{id}', [\App\Http\Controllers\MenusController::class, 'destroy']);
+    Route::post('/menus', [MenusController::class, 'store']);
+    Route::get('/menus/index', [MenusController::class, 'index']);
+    Route::put('/menus/{id}', [MenusController::class, 'update']);
+    Route::delete('/menus/{id}', [MenusController::class, 'destroy']);
 });
 
 

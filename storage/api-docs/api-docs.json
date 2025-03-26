@@ -203,16 +203,16 @@
                             "schema": {
                                 "required": [
                                     "title",
-                                    "content"
+                                    "description"
                                 ],
                                 "properties": {
                                     "title": {
                                         "type": "string",
                                         "example": "New Menus"
                                     },
-                                    "content": {
+                                    "description": {
                                         "type": "string",
-                                        "example": "This is the content of the menus."
+                                        "example": "This is the description of the menus."
                                     }
                                 },
                                 "type": "object"
@@ -222,7 +222,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "меню создан",
+                        "description": "Mеню создан",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -267,7 +267,7 @@
                     "Menus"
                 ],
                 "summary": "Получить все меню",
-                "description": "Получить список всех менюов",
+                "description": "Получить список всех меню",
                 "operationId": "67291178934f87312ea5ed6120171148",
                 "responses": {
                     "200": {
@@ -334,7 +334,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "меню обновлён",
+                        "description": "Mеню обновлён",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -382,7 +382,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "меню удалён",
+                        "description": "Mеню удалён",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -401,7 +401,7 @@
                         "description": "Нет доступа для удаления меню"
                     },
                     "404": {
-                        "description": "меню не найден"
+                        "description": "Mеню не найден"
                     }
                 },
                 "security": [

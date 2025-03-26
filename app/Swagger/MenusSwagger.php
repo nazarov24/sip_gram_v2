@@ -17,14 +17,14 @@ class MenusSwagger
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"title", "content"},
+     *             required={"title", "description"},
      *             @OA\Property(property="title", type="string", example="New Menus"),
-     *             @OA\Property(property="content", type="string", example="This is the content of the menus.")
+     *             @OA\Property(property="description", type="string", example="This is the description of the menus.")
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="меню создан",
+     *         description="Mеню создан",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Menus created successfully")
      *         )
@@ -43,7 +43,7 @@ class MenusSwagger
     public function store(){}
 
    /**
-     * Получить список всех менюов
+     * Получить список всех меню
      * @OA\Get(
      *     path="/api/menus/index",
      *     summary="Получить все меню",
@@ -83,7 +83,7 @@ class MenusSwagger
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="меню обновлён",
+     *         description="Mеню обновлён",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Menus updated successfully")
      *         )
@@ -117,7 +117,7 @@ class MenusSwagger
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="меню удалён",
+     *         description="Mеню удалён",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Menus deleted successfully")
      *         )
@@ -128,7 +128,7 @@ class MenusSwagger
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="меню не найден"
+     *         description="Mеню не найден"
      *     )
      * )
      */
