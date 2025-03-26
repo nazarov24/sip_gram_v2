@@ -15,7 +15,7 @@ use App\Http\Controllers\SectionController;
 
 Route::prefix('auth')->group(function (){
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);    
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
 
@@ -27,22 +27,22 @@ Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
 
 Route::get('/permissions', [PermissionController::class, 'index']);
 Route::post('/permissions', [PermissionController::class, 'store']);
-Route::put('/permissions/{id}', [PermissionController::class, 'update']); 
-Route::delete('/permissions/{id}/delete', [PermissionController::class, 'destroy']); 
+Route::put('/permissions/{id}', [PermissionController::class, 'update']);
+Route::delete('/permissions/{id}/delete', [PermissionController::class, 'destroy']);
 
 
 
 Route::middleware('auth:api')->group(function () {
     Route::post('role/{id}/permissions', [PermisionRoleController::class, 'assignPermissions']);
     Route::get('role/permissions', [PermisionRoleController::class, 'getPermissions']);
-    Route::delete('role/{role_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']); 
+    Route::delete('role/{role_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']);
 });
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('/posts', [PostController::class, 'store'])->middleware('permission:created posts');
-    Route::get('/posts/index', [PostController::class, 'index'])->middleware('permission:show posts'); 
-    Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('permission:edit posts'); 
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('permission:deleted posts'); 
+    Route::get('/posts/index', [PostController::class, 'index'])->middleware('permission:show posts');
+    Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('permission:edit posts');
+    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('permission:deleted posts');
 });
 
 // Подраздел
@@ -57,6 +57,11 @@ Route::post('sections/{section_id}/roles', [PermisionRoleController::class, 'ass
 Route::post('/subsections/{subsection_id}/roles', [PermisionRoleController::class, 'assignRoleToSubsection']);
 
 
-
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('/menus', [\App\Http\Controllers\MenusController::class, 'store']);
+    Route::get('/menus/index', [\App\Http\Controllers\MenusController::class, 'index']);
+    Route::put('/menus/{id}', [\App\Http\Controllers\MenusController::class, 'update']);
+    Route::delete('/menus/{id}', [\App\Http\Controllers\MenusController::class, 'destroy']);
+});
 
 

@@ -19,4 +19,8 @@ class Section extends Model
     {
         return $this->belongsToMany(Role::class, 'section_role');
     }
+
+    public function menus(){
+        return $this->belongsToMany(Menus::class, 'section_menu');
+    }
 }

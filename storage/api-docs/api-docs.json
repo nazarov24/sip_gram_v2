@@ -189,6 +189,228 @@
                 }
             }
         },
+        "/api/menus": {
+            "post": {
+                "tags": [
+                    "Menus"
+                ],
+                "summary": "Создать новый меню",
+                "operationId": "fcf59af544b0edba87b401759442bfa8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "content"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "New Menus"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "This is the content of the menus."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "меню создан",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Menus created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа для создания меню",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "У вас нет прав для создания меню."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/menus/index": {
+            "get": {
+                "tags": [
+                    "Menus"
+                ],
+                "summary": "Получить все меню",
+                "description": "Получить список всех менюов",
+                "operationId": "67291178934f87312ea5ed6120171148",
+                "responses": {
+                    "200": {
+                        "description": "Список меню",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/menus/{id}": {
+            "put": {
+                "tags": [
+                    "Menus"
+                ],
+                "summary": "Обновить меню",
+                "description": "Обновить меню",
+                "operationId": "ebb1ee42d5019bd54fd625e2c23e8b68",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID меню",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Updated Title"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated description of the menus."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "меню обновлён",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Menus updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа для обновления меню"
+                    },
+                    "404": {
+                        "description": "Mеню не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Menus"
+                ],
+                "summary": "Удалить меню",
+                "description": "Удалить меню",
+                "operationId": "a2678412ee1e7eeb3e0203e2e991d877",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID меню",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "меню удалён",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Menus deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа для удаления меню"
+                    },
+                    "404": {
+                        "description": "меню не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/role/permissions": {
             "get": {
                 "tags": [
@@ -1275,6 +1497,10 @@
         {
             "name": "Register",
             "description": "Register"
+        },
+        {
+            "name": "Menus",
+            "description": "Menus"
         },
         {
             "name": "Assign permissions role",
