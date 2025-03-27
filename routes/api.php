@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Orders\OrderController;
 use App\Http\Controllers\Api\Orders\OrderTariffAllowanceController;
 use App\Http\Controllers\Api\Orders\OrderTypeController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\MenusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\RoleController;
@@ -20,7 +21,7 @@ use App\Http\Controllers\SectionController;
 
 Route::prefix('auth')->group(function (){
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);    
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
 
@@ -30,15 +31,15 @@ Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
 
 Route::get('/permissions', [PermissionController::class, 'index']);
 Route::post('/permissions', [PermissionController::class, 'store']);
-Route::put('/permissions/{id}', [PermissionController::class, 'update']); 
-Route::delete('/permissions/{id}/delete', [PermissionController::class, 'destroy']); 
+Route::put('/permissions/{id}', [PermissionController::class, 'update']);
+Route::delete('/permissions/{id}/delete', [PermissionController::class, 'destroy']);
 
 
 
 Route::middleware('auth:api')->group(function () {
     Route::post('role/{id}/permissions', [PermisionRoleController::class, 'assignPermissions']);
     Route::get('role/permissions', [PermisionRoleController::class, 'getPermissions']);
-    Route::delete('role/{role_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']); 
+    Route::delete('role/{role_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']);
 });
 
 
@@ -52,4 +53,11 @@ Route::delete('/sections/{id}', [SectionController::class, 'destroy']);
 Route::post('sections/{role_id}/roles', [PermisionRoleController::class, 'assignSectionsToRole']);
 Route::post('/roles/{role_id}/subsections', [PermisionRoleController::class, 'assignRoleToSubsections']);
 
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('/menus', [MenusController::class, 'store']);
+    Route::get('/menus/index', [MenusController::class, 'index']);
+    Route::put('/menus/{id}', [MenusController::class, 'update']);
+    Route::delete('/menus/{id}', [MenusController::class, 'destroy']);
+});
 
