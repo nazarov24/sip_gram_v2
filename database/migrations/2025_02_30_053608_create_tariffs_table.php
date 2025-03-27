@@ -19,7 +19,7 @@ class CreateTariffsTable extends Migration
             $table->unsignedBigInteger('division_id');
             $table->unsignedBigInteger('type_lantl_id')->nullable();
             $table->integer('sort')->default(999);
-            $table->tinyInteger('is_sdrive')->default(1);
+            $table->tinyInteger('is_active')->default(1);
             $table->text('description')->nullable();
             $table->timestamps();
             $table->text('icon')->nullable();

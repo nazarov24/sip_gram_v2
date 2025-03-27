@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Support\Facades\Hash;
-use App\Swagger\AuthSwagger;
+use App\Swagger\Auth\AuthSwagger;
 
 class AuthController extends Controller
 {

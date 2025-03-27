@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "API Documentation",
-        "description": "Документация API для управления ролями и разрешениями",
+        "description": "Документация API ADMIN GRAM V2",
         "version": "1.0.0"
     },
     "paths": {
@@ -12,7 +12,7 @@
                     "Login"
                 ],
                 "summary": "Авторизация и получение токена",
-                "operationId": "391ff20c319bb76c327863f160ad6494",
+                "operationId": "7dcc56769c1e2272de35a167fd9e8cc4",
                 "parameters": [
                     {
                         "name": "email",
@@ -77,7 +77,7 @@
                     "Register"
                 ],
                 "summary": "Регистрация нового пользователя с ролью",
-                "operationId": "e46989b9a36c4a6bb55e9119974a1360",
+                "operationId": "df6d96c9f29d30bc928d33324451e533",
                 "parameters": [
                     {
                         "name": "name",
@@ -196,7 +196,7 @@
                 ],
                 "summary": "Получить разрешения пользователя",
                 "description": "Получить разрешения пользователя",
-                "operationId": "4180b5d208bdbc3e13f46cfe3f980e92",
+                "operationId": "e451d5294f5f6245a216eb667ac4d661",
                 "responses": {
                     "200": {
                         "description": "Разрешения пользователя",
@@ -227,7 +227,7 @@
                 ],
                 "summary": "Назначить разрешения роли и пользователям",
                 "description": "Назначить разрешения роли и всем пользователям с этой ролью",
-                "operationId": "d74fafbbef3f26b8bd6d48a14d76e07f",
+                "operationId": "2cbd53c53eb70683f07ecafbf86dcfe6",
                 "parameters": [
                     {
                         "name": "id",
@@ -293,7 +293,7 @@
                 ],
                 "summary": "Удалить разрешение по ID у пользователя",
                 "description": "Удалить разрешение по ID у пользователя",
-                "operationId": "8bef09e6943d24be578cc410237b09f1",
+                "operationId": "83e9f60bfd4fe1f110c8f6b145c9b693",
                 "parameters": [
                     {
                         "name": "role_id",
@@ -339,18 +339,18 @@
                 ]
             }
         },
-        "/api/sections/{section_id}/roles": {
+        "/api/sections/{role_id}/roles": {
             "post": {
                 "tags": [
-                    "Section"
+                    "Roles"
                 ],
-                "summary": "Назначить роль на раздел",
-                "operationId": "b9cd7633ba84cbefde1f4e423ef3d8b0",
+                "summary": "Назначить роль на несколько разделов",
+                "operationId": "4234efbc6bfc0184e753b8527c4453c6",
                 "parameters": [
                     {
-                        "name": "section_id",
+                        "name": "role_id",
                         "in": "path",
-                        "description": "ID раздела",
+                        "description": "ID роли",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -363,12 +363,19 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "role_id"
+                                    "section_ids"
                                 ],
                                 "properties": {
-                                    "role_id": {
-                                        "type": "integer",
-                                        "example": 2
+                                    "section_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -378,22 +385,59 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Роль успешно назначена на раздел",
+                        "description": "Роль успешно назначена на разделы",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Role assigned to section successfully."
-                                        },
-                                        "section": {
-                                            "type": "string",
-                                            "example": "Orders"
+                                            "example": "Роль успешно привязана к разделам."
                                         },
                                         "role": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Manager"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "sections": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Orders"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Роль или раздел(ы) не найдены",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "Manager"
+                                            "example": "Разделы не найдены."
                                         }
                                     },
                                     "type": "object"
@@ -409,18 +453,18 @@
                 ]
             }
         },
-        "/api/subsections/{subsection_id}/roles": {
+        "/api/roles/{role_id}/subsections": {
             "post": {
                 "tags": [
-                    "Subsection"
+                    "Roles"
                 ],
-                "summary": "Назначить роль на подраздел",
-                "operationId": "a00b0589c1ed3f95d0d1f52f801300f7",
+                "summary": "Назначить роль на несколько подразделов",
+                "operationId": "9af8ba296e41a50ca9c23399db0a300e",
                 "parameters": [
                     {
-                        "name": "subsection_id",
+                        "name": "role_id",
                         "in": "path",
-                        "description": "ID подраздела",
+                        "description": "ID роли",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -433,12 +477,19 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "role_id"
+                                    "subsection_ids"
                                 ],
                                 "properties": {
-                                    "role_id": {
-                                        "type": "integer",
-                                        "example": 2
+                                    "subsection_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -448,22 +499,59 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Роль успешно назначена на подраздел",
+                        "description": "Роль успешно назначена на подразделы",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Role assigned to subsection successfully."
-                                        },
-                                        "subsection": {
-                                            "type": "string",
-                                            "example": "User Management"
+                                            "example": "Роль успешно привязана к подразделам."
                                         },
                                         "role": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Admin"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "subsections": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "User Management"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Роль или подраздел(ы) не найдены",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "Admin"
+                                            "example": "Подразделы не найдены."
                                         }
                                     },
                                     "type": "object"
@@ -485,7 +573,7 @@
                     "Permissions"
                 ],
                 "summary": "Получить все разрешения",
-                "operationId": "48c3f9c645643d2086b2e73d58464647",
+                "operationId": "2165f33dcc3017fe9366bbf4f97be5e9",
                 "responses": {
                     "200": {
                         "description": "Список разрешений",
@@ -520,7 +608,7 @@
                     "Permissions"
                 ],
                 "summary": "Создать разрешение",
-                "operationId": "9d38c0c7086f1aced6695b7b42fe7b0d",
+                "operationId": "e793c150159c84bd8a728617ce39a308",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -573,7 +661,7 @@
                     "Permissions"
                 ],
                 "summary": "Обновить разрешение",
-                "operationId": "862376ce2b0926456917906551130d02",
+                "operationId": "ee7ca4af7632c8d5eda918651a153104",
                 "parameters": [
                     {
                         "name": "id",
@@ -637,7 +725,7 @@
                     "Permissions"
                 ],
                 "summary": "Удалить разрешение",
-                "operationId": "fa6ec8219c518f098f74c1e09f37843f",
+                "operationId": "96b02217a8a090b49671485d3422c2bf",
                 "parameters": [
                     {
                         "name": "id",
@@ -661,235 +749,13 @@
                 ]
             }
         },
-        "/api/posts": {
-            "post": {
-                "tags": [
-                    "Posts"
-                ],
-                "summary": "Создать новый пост",
-                "operationId": "35b456fcf0879a1bbd500730321407d7",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "title",
-                                    "content"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "New Post"
-                                    },
-                                    "content": {
-                                        "type": "string",
-                                        "example": "This is the content of the post."
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Пост создан",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Post created successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа для создания поста",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "У вас нет прав для создания поста."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/posts/index": {
-            "get": {
-                "tags": [
-                    "Posts"
-                ],
-                "summary": "Получить все посты",
-                "description": "Получить список всех постов",
-                "operationId": "a2468100b3a986b82aa11fadd24825db",
-                "responses": {
-                    "200": {
-                        "description": "Список постов",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/posts/{id}": {
-            "put": {
-                "tags": [
-                    "Posts"
-                ],
-                "summary": "Обновить пост",
-                "description": "Обновить пост",
-                "operationId": "40137bb61f4d08eea4af174152cb5904",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID поста",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "title",
-                                    "content"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "Updated Title"
-                                    },
-                                    "content": {
-                                        "type": "string",
-                                        "example": "Updated content of the post."
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Пост обновлён",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Post updated successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа для обновления поста"
-                    },
-                    "404": {
-                        "description": "Пост не найден"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Posts"
-                ],
-                "summary": "Удалить пост",
-                "description": "Удалить пост",
-                "operationId": "68c77956ef5a4f238e9ebedebd775d30",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID поста",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Пост удалён",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Post deleted successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа для удаления поста"
-                    },
-                    "404": {
-                        "description": "Пост не найден"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/roles": {
             "get": {
                 "tags": [
                     "Roles"
                 ],
                 "summary": "Получить все роли",
-                "operationId": "caa06108389e69200a06b0aa2c5e8c46",
+                "operationId": "e6782e223f48f99f099fc6ec5754a0e8",
                 "responses": {
                     "200": {
                         "description": "Список всех ролей",
@@ -924,7 +790,7 @@
                     "Roles"
                 ],
                 "summary": "Создать новую роль",
-                "operationId": "48fecef54dde58409fe876967bd893cf",
+                "operationId": "869de06887a1d0fbec2eaf1510b73f42",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -977,7 +843,7 @@
                     "Roles"
                 ],
                 "summary": "Удалить роль",
-                "operationId": "ac56590c731f2ff42df4d33be5b07093",
+                "operationId": "1c56b9701b40d6053f293882db24fa9e",
                 "parameters": [
                     {
                         "name": "id",
@@ -1281,24 +1147,16 @@
             "description": "Assign permissions role"
         },
         {
-            "name": "Section",
-            "description": "Section"
-        },
-        {
-            "name": "Subsection",
-            "description": "Subsection"
+            "name": "Roles",
+            "description": "Roles"
         },
         {
             "name": "Permissions",
             "description": "Permissions"
         },
         {
-            "name": "Posts",
-            "description": "Posts"
-        },
-        {
-            "name": "Roles",
-            "description": "Roles"
+            "name": "Section",
+            "description": "Section"
         }
     ]
 }
