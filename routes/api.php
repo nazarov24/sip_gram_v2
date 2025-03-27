@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\Api\Orders\JournalOrderController;
+use App\Http\Controllers\Api\Orders\OrderController;
+use App\Http\Controllers\Api\Orders\OrderTariffAllowanceController;
+use App\Http\Controllers\Api\Orders\OrderTypeController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Roles\RoleController;
 use App\Http\Controllers\Roles\PermissionController;
 use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\Api\Orders\SearchAddressController;
 use App\Http\Controllers\Roles\PermisionRoleController;
 use App\Http\Controllers\SectionController;
 
@@ -17,8 +22,6 @@ Route::prefix('auth')->group(function (){
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);    
 });
-
-
 
 
 Route::get('/roles', [RoleController::class, 'index']);
@@ -38,12 +41,6 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('role/{role_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']); 
 });
 
-Route::middleware(['auth:api'])->group(function () {
-    Route::post('/posts', [PostController::class, 'store'])->middleware('permission:created posts');
-    Route::get('/posts/index', [PostController::class, 'index'])->middleware('permission:show posts'); 
-    Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('permission:edit posts'); 
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('permission:deleted posts'); 
-});
 
 // Подраздел
 
@@ -52,11 +49,7 @@ Route::post('/sections', [SectionController::class, 'store']);
 Route::put('/sections/{id}', [SectionController::class, 'update']);
 Route::delete('/sections/{id}', [SectionController::class, 'destroy']);
 
-
-Route::post('sections/{section_id}/roles', [PermisionRoleController::class, 'assignRoleToSection']);
-Route::post('/subsections/{subsection_id}/roles', [PermisionRoleController::class, 'assignRoleToSubsection']);
-
-
-
+Route::post('sections/{role_id}/roles', [PermisionRoleController::class, 'assignSectionsToRole']);
+Route::post('/roles/{role_id}/subsections', [PermisionRoleController::class, 'assignRoleToSubsections']);
 
 

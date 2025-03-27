@@ -6,15 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Permission;
-use App\Swagger\RoleSwagger;
+use App\Swagger\Roles\RoleSwagger;
 
 class RoleController extends Controller
 {
 
-    public function index()
-    {
-        return Role::all();
-    }
+    public function index(){return Role::all();}
 
 
     public function store(Request $request)
@@ -23,10 +20,8 @@ class RoleController extends Controller
             'name' => $request->name,
             'guard_name' => 'web'
         ]);
-
         return response()->json($role, 201);
     }
-
 
 
     public function destroy($id)

@@ -8,7 +8,7 @@ use OpenApi\Annotations as OA;
  * @OA\Info(
  *     title="API Documentation",
  *     version="1.0.0",
- *     description="Документация API для управления ролями и разрешениями"
+ *     description="Документация API ADMIN GRAM V2"
  * )
  *
  * @OA\SecurityScheme(

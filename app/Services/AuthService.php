@@ -34,7 +34,7 @@ class AuthService
         $user->assignRole($validated['role']);
 
         return [
-            'message' => 'User registered successfully',
+            'message' => 'Пользователь успешно зарегистрирован',
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
