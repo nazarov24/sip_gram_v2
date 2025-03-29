@@ -24,7 +24,7 @@ class PermisionRoleServices
 
         $permissions = $users->map(function($user) {
             return [
-                'role_id' => $user->id,
+                'role_id' => $user->roles->pluck('id'),
                 'permissions' => $user->getAllPermissions()->pluck('name')
             ];
         });
@@ -32,7 +32,7 @@ class PermisionRoleServices
         return response()->json($permissions, 200);
     }
 
-    
+
     public static function assignPermissionsToRole(int $roleId, array $permissions): array
     {
         $role = Role::findOrFail($roleId);
@@ -100,28 +100,27 @@ class PermisionRoleServices
         ], 200);
     }
 
-    
+
 
 
     public static function assignRoleToSubsections(Request $request, $role_id)
     {
         $role = Role::findOrFail($role_id);
         $subsections = Subsection::whereIn('id', $request->subsection_ids)->get();
-    
+
         if ($subsections->isEmpty()) {
             return response()->json(['message' => 'Подразделы не найдены.'], 404);
         }
-    
+
         foreach ($subsections as $subsection) {
             $subsection->roles()->attach($role->id);
         }
-    
+
         return response()->json([
             'message' => 'Роль успешно привязана к подразделам.',
             'role' => new RoleSectionResource($role),
             'subsections' => SubsectionResource::collection($subsections),
         ], 200);
     }
-    
 
 }
