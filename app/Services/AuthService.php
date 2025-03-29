@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Http\Requests\RegisterRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Spatie\Permission\PermissionRegistrar;
 
 class AuthService
 {
@@ -25,13 +27,22 @@ class AuthService
     {
         $validated = $request->validated();
 
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
+        
+        $role = Role::findByName($validated['role'], 'api'); 
 
-        $user->assignRole($validated['role']);
+        if ($role) {
+            $user->assignRole($role);
+        } else {
+            return ['message' => 'Роль не найдена для guard "api"'];
+        }
+        
 
         return [
             'message' => 'Пользователь успешно зарегистрирован',

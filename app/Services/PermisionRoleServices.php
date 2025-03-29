@@ -20,64 +20,74 @@ class PermisionRoleServices
 {
     public static function getPermissions()
     {
-        $users = User::all();
+        $users = User::with('roles', 'permissions')->get();
 
-        $permissions = $users->map(function($user) {
+        $data = $users->map(function($user) {
             return [
-                'role_id' => $user->id,
-                'permissions' => $user->getAllPermissions()->pluck('name')
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'roles' => $user->roles->pluck('name'), 
+                'permissions' => $user->getAllPermissions()->pluck('name') 
             ];
         });
 
-        return response()->json($permissions, 200);
+        return response()->json($data, 200);
+
     }
 
     
-    public static function assignPermissionsToRole(int $roleId, array $permissions): array
+    public static function assignPermissionsToUser(int $userId, array $permissions): array
     {
-        $role = Role::findOrFail($roleId);
+        $user = User::findOrFail($userId);
+
+        if ($user->roles->isEmpty()) {
+            return ['message' => 'Пользователь не имеет роли. Разрешения не могут быть назначены.'];
+        }
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissionNames = Permission::whereIn('id', $permissions)->pluck('name');
 
-        $role->syncPermissions($permissionNames);
-
-        $users = User::role($role->name)->get();
-
-        foreach ($users as $user) {
-            $user->syncPermissions($permissionNames);
-        }
+        $user->syncPermissions($permissionNames);
 
         return [
-            'message' => 'Разрешения успешно назначены роли и всем связанным с ней пользователям.',
-            'role_id' => $role->id,
+            'message' => 'Разрешения успешно назначены пользователю.',
+            'user_id' => $user->id,
             'assigned_permissions' => $permissionNames,
         ];
     }
+    
 
 
-    public static function removePermissionById($role_id, $permission_id)
+
+    public static function removePermissionFromUser($user_id, $permission_id)
     {
-        $role = Role::findOrFail($role_id);
+        $user = User::findOrFail($user_id);
         $permission = Permission::findOrFail($permission_id);
 
-        if ($role->hasPermissionTo($permission)) {
-            $role->revokePermissionTo($permission);
+        $permissionRemoved = false;
 
-            $users = User::role($role->name)->get();
+        if ($user->hasDirectPermission($permission->name)) {
+            $user->revokePermissionTo($permission);
+            $permissionRemoved = true;
+        }
 
-            foreach ($users as $user) {
-                if ($user->hasPermissionTo($permission)) {
-                    $user->revokePermissionTo($permission);
-                }
+        foreach ($user->roles as $role) {
+            if ($role->hasPermissionTo($permission)) {
+                $role->revokePermissionTo($permission);
+                $permissionRemoved = true;
             }
         }
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        return response()->json(['message' => 'Разрешения удалена'], 200);
+        if ($permissionRemoved) {
+            return response()->json(['message' => 'Разрешение успешно удалено у пользователя.'], 200);
+        } else {
+            return response()->json(['message' => 'У пользователя нет такого разрешения.'], 404);
+        }
     }
+    
 
 
     public static function assignSectionsToRole(Request $request, $role_id)

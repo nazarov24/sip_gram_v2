@@ -110,7 +110,7 @@ class SectionSwagger
 
     public function update(){}
 
-
+    
     /**
      * @OA\Delete(
      *     path="/api/sections/{id}",
@@ -138,4 +138,7 @@ class SectionSwagger
      * )
      */
     public function destroy(){}
+
+
+   
 }

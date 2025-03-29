@@ -28,6 +28,7 @@ Route::prefix('auth')->group(function (){
 Route::get('/roles', [RoleController::class, 'index']);
 Route::post('/roles', [RoleController::class, 'store']);
 Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
+Route::post('users/{user_id}/roles', [RoleController::class, 'assignRoleToUser']);
 
 Route::get('/permissions', [PermissionController::class, 'index']);
 Route::post('/permissions', [PermissionController::class, 'store']);
@@ -39,7 +40,7 @@ Route::delete('/permissions/{id}/delete', [PermissionController::class, 'destroy
 Route::middleware('auth:api')->group(function () {
     Route::post('role/{id}/permissions', [PermisionRoleController::class, 'assignPermissions']);
     Route::get('role/permissions', [PermisionRoleController::class, 'getPermissions']);
-    Route::delete('role/{role_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']);
+    Route::delete('role/{user_id}/permissions/{permission_id}', [PermisionRoleController::class, 'removePermissionById']);
 });
 
 
@@ -48,16 +49,21 @@ Route::middleware('auth:api')->group(function () {
 Route::get('/sections/index', [SectionController::class, 'index']);
 Route::post('/sections', [SectionController::class, 'store']);
 Route::put('/sections/{id}', [SectionController::class, 'update']);
+Route::post('/sections/{id}/subsections', [SectionController::class, 'addSubsection']);
 Route::delete('/sections/{id}', [SectionController::class, 'destroy']);
+
+
 
 Route::post('sections/{role_id}/roles', [PermisionRoleController::class, 'assignSectionsToRole']);
 Route::post('/roles/{role_id}/subsections', [PermisionRoleController::class, 'assignRoleToSubsections']);
 
 
+
+
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('/menus', [MenusController::class, 'store']);
-    Route::get('/menus/index', [MenusController::class, 'index']);
-    Route::put('/menus/{id}', [MenusController::class, 'update']);
-    Route::delete('/menus/{id}', [MenusController::class, 'destroy']);
+    Route::post('/menus', [MenusController::class, 'store'])->middleware('permission:created posts');
+    Route::get('/menus/index', [MenusController::class, 'index'])->middleware('permission:show posts');
+    Route::put('/menus/{id}', [MenusController::class, 'update'])->middleware('permission:edit posts');
+    Route::delete('/menus/{id}', [MenusController::class, 'destroy'])->middleware('permission:delate posts');
 });
 

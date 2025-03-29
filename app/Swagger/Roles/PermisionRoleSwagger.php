@@ -68,12 +68,12 @@ class PermisionRoleSwagger
    /**
      * Удалить разрешение по ID у пользователя
      * @OA\Delete(
-     *     path="/api/role/{role_id}/permissions/{permission_id}",
+     *     path="/api/role/{user_id}/permissions/{permission_id}",
      *     summary="Удалить разрешение по ID у пользователя",
      *     tags={"Assign permissions role"},
      *     security={{ "bearerAuth":{} }},
      *     @OA\Parameter(
-     *         name="role_id",
+     *         name="user_id",
      *         in="path",
      *         required=true,
      *         description="ID роля",
@@ -105,7 +105,7 @@ class PermisionRoleSwagger
    * @OA\Post(
    *     path="/api/sections/{role_id}/roles",
    *     summary="Назначить роль на несколько разделов",
-   *     tags={"Roles"},
+   *     tags={"Section"},
    *     security={{ "bearerAuth":{} }},
    *     @OA\Parameter(
    *         name="role_id",
@@ -165,7 +165,7 @@ class PermisionRoleSwagger
    * @OA\Post(
    *     path="/api/roles/{role_id}/subsections",
    *     summary="Назначить роль на несколько подразделов",
-   *     tags={"Roles"},
+   *     tags={"Section"},
    *     security={{ "bearerAuth":{} }},
    *     @OA\Parameter(
    *         name="role_id",

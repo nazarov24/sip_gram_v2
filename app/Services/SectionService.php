@@ -18,26 +18,36 @@ class SectionService
 
         $sections->transform(function ($section) {
 
-            $roles = Role::whereHas('sections', function ($query) use ($section) {
+            // Получаем пользователей с доступом к секции через роли
+            $users = User::whereHas('roles.sections', function ($query) use ($section) {
                 $query->where('sections.id', $section->id);
             })->get();
 
-            $section->roles = $roles->map(function ($role) {
+            // Формируем данные о секции
+            $section->users = $users->map(function ($user) {
                 return [
-                    'role' => $role->name,
-                    'permissions' => $role->permissions->pluck('name')
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'roles' => $user->roles->pluck('name'),
+                    'permissions' => $user->getAllPermissions()->pluck('name'),
                 ];
             });
 
+            // Работаем с подсекциями
             $section->subsections->transform(function ($subsection) {
-                $subsectionRoles = Role::whereHas('subsections', function ($query) use ($subsection) {
+
+                // Получаем пользователей с доступом к подсекции через роли
+                $subsectionUsers = User::whereHas('roles.subsections', function ($query) use ($subsection) {
                     $query->where('subsections.id', $subsection->id);
                 })->get();
 
-                $subsection->roles = $subsectionRoles->map(function ($role) {
+                // Формируем данные о подсекции
+                $subsection->users = $subsectionUsers->map(function ($user) {
                     return [
-                        'role' => $role->name,
-                        'permissions' => $role->permissions->pluck('name')
+                        'user_id' => $user->id,
+                        'user_name' => $user->name,
+                        'roles' => $user->roles->pluck('name'),
+                        'permissions' => $user->getAllPermissions()->pluck('name'),
                     ];
                 });
 
@@ -48,6 +58,8 @@ class SectionService
         });
 
         return $sections;
+
+        
     }
 
 
@@ -77,7 +89,7 @@ class SectionService
         $section = Section::find($id);
 
         if (!$section) {
-            return ['message' => 'Раздел не найден'];
+            return response()->json(['message' => 'Раздел не найден'], 404);
         }
 
         $section->update([
@@ -85,24 +97,38 @@ class SectionService
             'icon' => $request->icon,
         ]);
 
+        $currentSubsectionIds = $section->subsections()->pluck('id')->toArray();
+        $newSubsectionTitles = [];
+
         foreach ($request->subsections as $subsectionData) {
-            if (isset($subsectionData['id'])) {
-                $subsection = Subsection::find($subsectionData['id']);
-                if ($subsection) {
-                    $subsection->update([
-                        'title' => $subsectionData['title'],
-                        'component_id' => $subsectionData['component_id'],
-                    ]);
-                }
+            $subsection = $section->subsections()
+                ->where('title', $subsectionData['title'])
+                ->first();
+
+            if ($subsection) {
+                $subsection->update([
+                    'component_id' => $subsectionData['component_id'],
+                ]);
+                $currentSubsectionIds = array_diff($currentSubsectionIds, [$subsection->id]);
             } else {
-                $section->subsections()->create([
+                $newSubsection = $section->subsections()->create([
                     'title' => $subsectionData['title'],
                     'component_id' => $subsectionData['component_id'],
                 ]);
+                $newSubsectionTitles[] = $newSubsection->title;
             }
         }
 
-        return $section;
+
+        if (!empty($currentSubsectionIds)) {
+            $section->subsections()->whereIn('id', $currentSubsectionIds)->delete();
+        }
+
+        return response()->json([
+            'message' => 'Раздел и подразделы обновлены',
+            'new_subsections' => $newSubsectionTitles,
+            'section' => $section->load('subsections'),
+        ]);
     }
 
 
