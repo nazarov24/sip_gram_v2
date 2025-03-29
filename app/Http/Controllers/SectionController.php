@@ -32,16 +32,16 @@ class SectionController extends Controller
 
     public function update(SectionRequest $request, $id)
     {
-        $section = SectionService::update($request, $id);
-        return response()->json([$section]);
+        return SectionService::update($request, $id);
     }
-
 
     public function destroy($id)
     {
         $section = SectionService::destroy($id);
         return response()->json([$section]);
     }
+
+   
 
 }
 

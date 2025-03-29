@@ -79,5 +79,53 @@ class RoleSwagger
 
     public function destroy($id){}
 
+    /**
+     * @OA\Post(
+     *     path="/api/users/{user_id}/roles",
+     *     summary="Назначить роль пользователю",
+     *     tags={"Roles"},
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         description="ID пользователя, которому нужно назначить роль",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="role_id", type="integer", description="ID роли, которую нужно назначить пользователю")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Роль успешно назначена пользователю",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Роль успешно назначена пользователю."),
+     *             @OA\Property(property="user_id", type="integer", example=1),
+     *             @OA\Property(property="role_name", type="string", example="admin")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Пользователь или роль не найдены",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Пользователь или роль не найдены.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Неверный запрос",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Роль не найдена")
+     *         )
+     *     )
+     * )
+     */
+
+     public function assignRoleToUser(){}
+
+
 
 }

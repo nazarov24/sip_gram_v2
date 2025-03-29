@@ -508,17 +508,17 @@
                 ]
             }
         },
-        "/api/role/{role_id}/permissions/{permission_id}": {
+        "/api/role/{user_id}/permissions/{permission_id}": {
             "delete": {
                 "tags": [
                     "Assign permissions role"
                 ],
                 "summary": "Удалить разрешение по ID у пользователя",
                 "description": "Удалить разрешение по ID у пользователя",
-                "operationId": "83e9f60bfd4fe1f110c8f6b145c9b693",
+                "operationId": "39c4b0a0a471a4ab91131ea46a1d4fb7",
                 "parameters": [
                     {
-                        "name": "role_id",
+                        "name": "user_id",
                         "in": "path",
                         "description": "ID роля",
                         "required": true,
@@ -564,7 +564,7 @@
         "/api/sections/{role_id}/roles": {
             "post": {
                 "tags": [
-                    "Roles"
+                    "Section"
                 ],
                 "summary": "Назначить роль на несколько разделов",
                 "operationId": "4234efbc6bfc0184e753b8527c4453c6",
@@ -678,7 +678,7 @@
         "/api/roles/{role_id}/subsections": {
             "post": {
                 "tags": [
-                    "Roles"
+                    "Section"
                 ],
                 "summary": "Назначить роль на несколько подразделов",
                 "operationId": "9af8ba296e41a50ca9c23399db0a300e",
@@ -1102,6 +1102,105 @@
                 ]
             }
         },
+        "/api/users/{user_id}/roles": {
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Назначить роль пользователю",
+                "operationId": "b4f7a5617feaf00f0ef28621ad9a613a",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID пользователя, которому нужно назначить роль",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "role_id": {
+                                        "description": "ID роли, которую нужно назначить пользователю",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Роль успешно назначена пользователю",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Роль успешно назначена пользователю."
+                                        },
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "role_name": {
+                                            "type": "string",
+                                            "example": "admin"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Пользователь или роль не найдены",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Пользователь или роль не найдены."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Роль не найдена"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/sections/index": {
             "get": {
                 "tags": [
@@ -1373,16 +1472,16 @@
             "description": "Assign permissions role"
         },
         {
-            "name": "Roles",
-            "description": "Roles"
+            "name": "Section",
+            "description": "Section"
         },
         {
             "name": "Permissions",
             "description": "Permissions"
         },
         {
-            "name": "Section",
-            "description": "Section"
+            "name": "Roles",
+            "description": "Roles"
         }
     ]
 }

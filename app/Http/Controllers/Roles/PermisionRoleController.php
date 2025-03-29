@@ -24,17 +24,17 @@ class PermisionRoleController extends Controller
     }
 
 
-    public function assignPermissions(PermisionRoleRequest $request, $roleId)
+    public function assignPermissions(PermisionRoleRequest $request, $user_id)
     {
         $validated = $request->validated();
-        $result = PermisionRoleServices::assignPermissionsToRole($roleId, $validated['permissions']);
+        $result = PermisionRoleServices::assignPermissionsToUser($user_id, $validated['permissions']);
         return response()->json($result, 200);
     }
 
 
-    public function removePermissionById($role_id, $permission_id)
+    public function removePermissionById($user_id, $permission_id)
     {
-       $result = PermisionRoleServices::removePermissionById($role_id, $permission_id);
+       $result = PermisionRoleServices::removePermissionFromUser($user_id, $permission_id);
        return response()->json($result, 200);
     }
 

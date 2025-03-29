@@ -23,4 +23,9 @@ class Section extends Model
     public function menus(){
         return $this->belongsToMany(Menus::class, 'section_menu');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
